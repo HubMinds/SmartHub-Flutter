@@ -53,6 +53,8 @@ class LoginScreenState extends State<LoginScreen> {
   bool email = false;
   bool value = false;
 
+  
+
   Future<void> _createUser() async {
     // Check for empty fields
     if (newEmailController.text.isEmpty ||
