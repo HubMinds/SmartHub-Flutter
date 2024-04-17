@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,40 +41,51 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCoD9kbXjX_cmOb4HFFxfy7m_a8OL1tA1I',
-    appId: '1:632129442438:web:df1e03acc60e086499f707',
-    messagingSenderId: '632129442438',
-    projectId: 'hubminds-9017f',
-    authDomain: 'hubminds-9017f.firebaseapp.com',
-    storageBucket: 'hubminds-9017f.appspot.com',
-    measurementId: 'G-DCVSWXKTMB',
+    apiKey: 'AIzaSyCJplHyuZ5f4yQFPzsv7tA4xIKGWnpmNU4',
+    appId: '1:852941266418:web:8c4cd815b58a068d719f6b',
+    messagingSenderId: '852941266418',
+    projectId: 'hubminds-4710f',
+    authDomain: 'hubminds-4710f.firebaseapp.com',
+    storageBucket: 'hubminds-4710f.appspot.com',
+    measurementId: 'G-7M7PE2HLG3',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAqZzl5_laPXACHBxWafM5evRJ4sN0tH7E',
-    appId: '1:632129442438:android:4cc725b7362b3cea99f707',
-    messagingSenderId: '632129442438',
-    projectId: 'hubminds-9017f',
-    storageBucket: 'hubminds-9017f.appspot.com',
+    apiKey: 'AIzaSyAn56HjgttOgLvjYG6yaKZw0ANND3Iy3gA',
+    appId: '1:852941266418:android:7f711359e305e840719f6b',
+    messagingSenderId: '852941266418',
+    projectId: 'hubminds-4710f',
+    storageBucket: 'hubminds-4710f.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC2XvVOHWfZkBy871c-Fb5vRd2ajZA8mqw',
-    appId: '1:632129442438:ios:96324754861689f099f707',
-    messagingSenderId: '632129442438',
-    projectId: 'hubminds-9017f',
-    storageBucket: 'hubminds-9017f.appspot.com',
-    iosClientId: '632129442438-4leqquucbq27smh4tp0n7l66d5fcs7rl.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC264h4A9pA7Lrz9OfbIJddPuciTCP5XW8',
+    appId: '1:852941266418:ios:1049b61447113c10719f6b',
+    messagingSenderId: '852941266418',
+    projectId: 'hubminds-4710f',
+    storageBucket: 'hubminds-4710f.appspot.com',
+    iosClientId: '852941266418-qt68dpcdri6kl8csnabe62b7fvip1qm9.apps.googleusercontent.com',
     iosBundleId: 'com.example.smarthubFlutter',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC2XvVOHWfZkBy871c-Fb5vRd2ajZA8mqw',
-    appId: '1:632129442438:ios:bccde0d2c79ea64d99f707',
-    messagingSenderId: '632129442438',
-    projectId: 'hubminds-9017f',
-    storageBucket: 'hubminds-9017f.appspot.com',
-    iosClientId: '632129442438-oi5n9vv3b484jqc8p0ecasb8ippb6v9g.apps.googleusercontent.com',
-    iosBundleId: 'com.example.smarthubFlutter.RunnerTests',
+    apiKey: 'AIzaSyC264h4A9pA7Lrz9OfbIJddPuciTCP5XW8',
+    appId: '1:852941266418:ios:1049b61447113c10719f6b',
+    messagingSenderId: '852941266418',
+    projectId: 'hubminds-4710f',
+    storageBucket: 'hubminds-4710f.appspot.com',
+    iosClientId: '852941266418-qt68dpcdri6kl8csnabe62b7fvip1qm9.apps.googleusercontent.com',
+    iosBundleId: 'com.example.smarthubFlutter',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCJplHyuZ5f4yQFPzsv7tA4xIKGWnpmNU4',
+    appId: '1:852941266418:web:e05cf605cb333679719f6b',
+    messagingSenderId: '852941266418',
+    projectId: 'hubminds-4710f',
+    authDomain: 'hubminds-4710f.firebaseapp.com',
+    storageBucket: 'hubminds-4710f.appspot.com',
+    measurementId: 'G-8K52V2H37R',
+  );
+
 }

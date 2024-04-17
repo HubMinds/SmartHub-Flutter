@@ -1,4 +1,4 @@
-// Register Section
+/* // Register Section
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -69,4 +69,4 @@
       ),
     );
   }
-}
+} */
