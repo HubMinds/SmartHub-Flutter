@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smarthub_flutter/screens/register.dart';
 import 'home_screen.dart';
 import 'package:logger/logger.dart';
 
@@ -44,8 +45,6 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController newEmailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController _passwordCheck = TextEditingController();
-  final TextEditingController _goal = TextEditingController();
 
   bool login = false;
   bool passCheck = false;
@@ -54,75 +53,18 @@ class LoginScreenState extends State<LoginScreen> {
   bool value = false;
 
   
-
-  Future<void> _createUser() async {
-    // Check for empty fields
-    if (newEmailController.text.isEmpty ||
-        newPasswordController.text.isEmpty ||
-        _passwordCheck.text.isEmpty ||
-        _goal.text.isEmpty) {
-      email = true;
-      pass = true;
-      passCheck = true;
-      value = true;
-      setState(() {});
-      // Display an error message or handle the case where fields are empty.
-      return;
-    }
-
-    // Check for password match
-    if (newPasswordController.text != _passwordCheck.text) {
-      passCheck = true;
-      setState(() {});
-      return;
-    }
-
-    // Validate email and password format
-    // Add more sophisticated validation as needed
-
-    try {
-      UserCredential newUser = await _auth.createUserWithEmailAndPassword(
-        email: newEmailController.text,
-        password: newPasswordController.text,
-      );
-
-      logger.i("User signed in: ${newUser.user!.uid}");
-      String user = newUser.user!.uid;
-
-      FirebaseFirestore.instance.collection('users').doc(user).set({
-        'goal(current)': int.parse(_goal.text),
-        'Expense': [],
-        'expense(index)': [],
-        'expense(value)': [],
-        'Income': [],
-        'Income(Value)': [],
-        'Income(index)': [],
-      });
-
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen(uid: user)),
-        );
-      }
-
-      newEmailController.clear();
-      newPasswordController.clear();
-      _passwordCheck.clear();
-      _goal.clear();
-    } catch (e) {
-      logger.i("Failed to sign in: $e");
-      // Handle the error, e.g., show a snackbar or display an error message
-      email = true;
-      pass = true;
-      value = true;
-      newEmailController.clear();
-      newPasswordController.clear();
-      _passwordCheck.clear();
-      _goal.clear();
-      setState(() {});
-    }
+  void _register() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RegisterScreen()),
+            );
+    print("User signed out");
+  } catch (e) {
+    print("Error signing out: $e");
   }
+} 
 
   Future<void> _signIn() async {
     try {
@@ -230,6 +172,32 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 32.0),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xff667eea), Color(0xff764ba2)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      )),
+                  onPressed: _register,
+                  child: const Center(
+                    child: Text(
+                      'Register Here',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),

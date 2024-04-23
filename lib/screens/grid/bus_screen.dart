@@ -8,7 +8,7 @@ class BusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bus Routes'),
+        title: const Text('Bus Route api will be here'),
       ),
       body: const GoogleMap(
         initialCameraPosition: CameraPosition(
