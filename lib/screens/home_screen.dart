@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../extensions/animated_list_state_extension.dart';
 import 'package:logger/logger.dart';
-import 'grid/bus_screen.dart';
 import 'grid/calendar_screen.dart';
 import 'grid/news_screen.dart';
 import 'grid/weather_screen.dart';
@@ -21,9 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<String> items = ['Bus Routes', 'News', 'Weather', 'Calendar'];
+  final List<String> items = ['News', 'Weather', 'Calendar'];
   final List<IconData> icons = [
-    Icons.directions_bus,
     Icons.article,
     Icons.wb_sunny,
     Icons.calendar_today
@@ -164,12 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: GestureDetector(
             onTap: () {
               switch (items[index]) {
-                case 'Bus Routes':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const BusScreen()),
-                  );
-                  break;
                 case 'News':
                   Navigator.push(
                     context,
@@ -186,8 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 case 'Calendar':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => CalendarScreen()),
+                    MaterialPageRoute(builder: (context) => CalendarScreen()),
                   );
                   break;
                 default:
