@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,7 +60,7 @@ class LoginScreenState extends State<LoginScreen> {
     await FirebaseAuth.instance.signOut();
     Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RegisterScreen()),
+              MaterialPageRoute(builder: (context) => const RegisterScreen()),
             );
     print("User signed out");
   } catch (e) {
