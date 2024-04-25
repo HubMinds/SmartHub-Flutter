@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({Key? key}) : super(key: key);
@@ -10,10 +9,18 @@ class BusScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bus Routes'),
       ),
-      body: const GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(37.42796133580664, -122.085749655962),
-          zoom: 14.4746,
+      body: const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'The Bus Routes feature is currently not available due to limited development resources. '
+            'We are working to allocate more developers and will update this feature as soon as possible.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.red, // Optional: to make the text stand out
+            ),
+          ),
         ),
       ),
     );

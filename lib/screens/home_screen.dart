@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'grid/calendar_screen.dart';
 import 'grid/news_screen.dart';
 import 'grid/weather_screen.dart';
+import 'grid/bus_screen.dart';
 
 var logger = Logger();
 
@@ -20,11 +21,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<String> items = ['News', 'Weather', 'Calendar'];
+  final List<String> items = ['News', 'Weather', 'Calendar', 'Bus Routes'];
   final List<IconData> icons = [
     Icons.article,
     Icons.wb_sunny,
-    Icons.calendar_today
+    Icons.calendar_today,
+    Icons.directions_bus
   ]; // Add a list of icons for each item
 
   final GlobalKey<AnimatedListState> _listKey =
@@ -179,6 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CalendarScreen()),
+                  );
+                  break;
+                case 'Bus Routes':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BusScreen()),
                   );
                   break;
                 default:
