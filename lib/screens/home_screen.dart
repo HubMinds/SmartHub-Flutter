@@ -1,4 +1,8 @@
+// ignore_for_file: avoid_print
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smarthub_flutter/screens/login_screen.dart';
 import '../extensions/animated_list_state_extension.dart';
 import 'package:logger/logger.dart';
 import 'grid/calendar_screen.dart';
@@ -31,6 +35,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final GlobalKey<AnimatedListState> _listKey =
       GlobalKey<AnimatedListState>(); // Add a key for the animated list
+
+  void signOutUser() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    Navigator.push(
+              // ignore: use_build_context_synchronously
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+    print("User signed out");
+  } catch (e) {
+    print("Error signing out: $e");
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -103,19 +121,29 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         // Use Scaffold widget to define the app layout
         appBar: AppBar(
-          title: const Text('SmartHub App'),
-        ),
-        body: GridView.count(
-          // Use a GridView instead of an AnimatedList
-          key: _listKey, // Add the key for the animated list
-          crossAxisCount: 2, // Specify the number of columns in the grid
-          children: List.generate(items.length, (index) {
-            return _buildItem(index);
-          }),
+        title: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                signOutUser();
+              },
+            ),
+            const Text('SmartHub App'),
+          ],
         ),
       ),
-    );
-  }
+      body: GridView.count(
+        // Use a GridView instead of an AnimatedList
+        key: _listKey, // Add the key for the animated list
+        crossAxisCount: 2, // Specify the number of columns in the grid
+        children: List.generate(items.length, (index) {
+          return _buildItem(index);
+        }),
+      ),
+    ),
+  );
+}
 
   Widget _buildItem(int index) {
     return DragTarget<int>(
@@ -180,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 case 'Calendar':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CalendarScreen()),
+                    MaterialPageRoute(builder: (context) => CalendarScreen(uid: widget.uid)),
                   );
                   break;
                 case 'Bus Routes':
