@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smarthub_flutter/screens/login_screen.dart';
 import 'home_screen.dart';
 import 'package:logger/logger.dart';
  
- // Register Section
+ // Register SectionS
 
 var logger = Logger();
 
@@ -45,7 +46,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController newEmailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController _passwordCheck = TextEditingController();
-  final TextEditingController _goal = TextEditingController();
 
   bool login = false;
   bool passCheck = false;
@@ -53,14 +53,21 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool email = false;
   bool value = false;
 
+
+  void _switch() {
+    Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+
+  }
   
 
   Future<void> _createUser() async {
     // Check for empty fields
     if (newEmailController.text.isEmpty ||
         newPasswordController.text.isEmpty ||
-        _passwordCheck.text.isEmpty ||
-        _goal.text.isEmpty) {
+        _passwordCheck.text.isEmpty ) {
       email = true;
       pass = true;
       passCheck = true;
@@ -99,7 +106,6 @@ class RegisterScreenState extends State<RegisterScreen> {
       newEmailController.clear();
       newPasswordController.clear();
       _passwordCheck.clear();
-      _goal.clear();
     } catch (e) {
       logger.i("Failed to sign in: $e");
       // Handle the error, e.g., show a snackbar or display an error message
@@ -109,7 +115,6 @@ class RegisterScreenState extends State<RegisterScreen> {
       newEmailController.clear();
       newPasswordController.clear();
       _passwordCheck.clear();
-      _goal.clear();
       setState(() {});
     }
   }
@@ -122,23 +127,22 @@ class RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
+              // Temp logo for now
+              const FlutterLogo(size: 100.0),
+              const SizedBox(height: 50.0),
+              const Text(
                       'Register',
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 34,
-                        fontFamily: 'helvetica',
-                        color: Color(0xffffffff),
-                      ),
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
                     ),
+                    const SizedBox(height: 20.0),
+
                     TextFormField(
                       controller: newEmailController,
                       decoration: InputDecoration(
@@ -146,6 +150,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         errorText: email ? "Email must be in abc@def.com format" : null,
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                     ),
                     SizedBox(height: 16.0),
@@ -157,6 +164,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         errorText: pass ? "Password must be at least 6 characters" : null,
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                     ),
                     SizedBox(height: 16.0),
@@ -168,21 +178,68 @@ class RegisterScreenState extends State<RegisterScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         errorText: passCheck ? "Passwords do not match" : null,
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                     ),
-
                     SizedBox(height: 32.0),
-                    ElevatedButton(
-                      onPressed: _createUser,
-                      child: Text('Register'),
+                    Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xff667eea), Color(0xff764ba2)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      )),
+                  onPressed: _createUser,
+                  child: const Center(
+                    child: Text(
+                      'Register',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32.0),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xff667eea), Color(0xff764ba2)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      )),
+                  onPressed: _switch,
+                  child: const Center(
+                    child: Text(
+                      'Already have an account? Sign in here',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
                   ],
                 ),
               ),
-            ],
+            
           ),
-        ),
-      ),
-    );
+        );
   }
 } 

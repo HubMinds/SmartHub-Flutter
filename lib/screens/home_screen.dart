@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 case 'Calendar':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CalendarScreen()),
+                    MaterialPageRoute(builder: (context) => CalendarScreen(uid: widget.uid)),
                   );
                   break;
                 default:
