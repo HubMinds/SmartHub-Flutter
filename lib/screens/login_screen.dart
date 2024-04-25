@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,19 +52,18 @@ class LoginScreenState extends State<LoginScreen> {
   bool email = false;
   bool value = false;
 
-  
   void _register() async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-            );
-    print("User signed out");
-  } catch (e) {
-    print("Error signing out: $e");
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+      );
+      print("User signed out");
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
-} 
 
   Future<void> _signIn() async {
     try {
@@ -199,7 +196,6 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

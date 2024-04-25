@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smarthub_flutter/screens/login_screen.dart';
 import 'home_screen.dart';
 import 'package:logger/logger.dart';
- 
- // Register SectionS
+
+// Register Section
 
 var logger = Logger();
 
@@ -53,21 +53,18 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool email = false;
   bool value = false;
 
-
   void _switch() {
     Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
-
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
   }
-  
 
   Future<void> _createUser() async {
     // Check for empty fields
     if (newEmailController.text.isEmpty ||
         newPasswordController.text.isEmpty ||
-        _passwordCheck.text.isEmpty ) {
+        _passwordCheck.text.isEmpty) {
       email = true;
       pass = true;
       passCheck = true;
@@ -118,7 +115,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       setState(() {});
     }
   }
-              
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,57 +131,59 @@ class RegisterScreenState extends State<RegisterScreen> {
               const FlutterLogo(size: 100.0),
               const SizedBox(height: 50.0),
               const Text(
-                      'Register',
-                      style: TextStyle(
+                'Register',
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
-                    ),
-                    const SizedBox(height: 20.0),
+              ),
+              const SizedBox(height: 20.0),
 
-                    TextFormField(
-                      controller: newEmailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        filled: true,
-                        fillColor: Colors.white,
-                        errorText: email ? "Email must be in abc@def.com format" : null,
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: newPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        filled: true,
-                        fillColor: Colors.white,
-                        errorText: pass ? "Password must be at least 6 characters" : null,
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    TextFormField(
-                      controller: _passwordCheck,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Confirm Password',
-                        filled: true,
-                        fillColor: Colors.white,
-                        errorText: passCheck ? "Passwords do not match" : null,
-                        border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 32.0),
-                    Container(
+              TextFormField(
+                controller: newEmailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  filled: true,
+                  fillColor: Colors.white,
+                  errorText:
+                      email ? "Email must be in abc@def.com format" : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                controller: newPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  filled: true,
+                  fillColor: Colors.white,
+                  errorText:
+                      pass ? "Password must be at least 6 characters" : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                controller: _passwordCheck,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  filled: true,
+                  fillColor: Colors.white,
+                  errorText: passCheck ? "Passwords do not match" : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 32.0),
+              Container(
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
@@ -235,11 +234,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-                  ],
-                ),
-              ),
-            
+            ],
           ),
-        );
+        ),
+      ),
+    );
   }
-} 
+}
