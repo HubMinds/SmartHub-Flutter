@@ -3,6 +3,9 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:logger/logger.dart';
+
+var logger = Logger();
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({Key? key}) : super(key: key);
@@ -18,6 +21,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
   String _wind = '';
   String _humidity = '';
   String _precipitation = '';
+  String _weatherIcon = '';
+  List<dynamic> _forecastData = [];
 
   final Location location = Location();
   Timer? _timer;
@@ -26,8 +31,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     super.initState();
     _checkLocationService();
-    _fetchCurrentLocationAndWeather(); // Fetch immediately on app start.
-    _startPeriodicWeatherUpdates(); // Then start the periodic updates.
+    _fetchCurrentLocationAndWeather();
+    _fetchForecastData();
+    _startPeriodicWeatherUpdates();
   }
 
   @override
@@ -37,10 +43,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void _checkLocationService() async {
-    bool _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         setState(() => _location = 'Location services are disabled.');
         return;
       }
@@ -49,20 +55,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void _checkPermission() async {
-    PermissionStatus _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         setState(() => _location = 'Location permission denied.');
         return;
       }
     }
-    _fetchCurrentLocationAndWeather(); // Also fetch weather after permission is granted.
+    _fetchCurrentLocationAndWeather();
   }
 
   void _startPeriodicWeatherUpdates() {
-    _timer = Timer.periodic(
-        Duration(minutes: 30), (Timer t) => _fetchCurrentLocationAndWeather());
+    _timer = Timer.periodic(const Duration(minutes: 30),
+        (Timer t) => _fetchCurrentLocationAndWeather());
   }
 
   void _fetchCurrentLocationAndWeather() async {
@@ -81,8 +87,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
         setState(() {
           _location =
               '${weatherData['name']}, ${weatherData['sys']['country']}';
-          _temperature = '${weatherData['main']['temp']}°C';
-          _weatherDescription = weatherData['weather'][0]['description'];
+          _temperature =
+              '${double.parse(weatherData['main']['temp'].toString()).toStringAsFixed(1)}°C';
+          _weatherDescription =
+              _capitalizeWords(weatherData['weather'][0]['description']);
+          _weatherIcon = _getWeatherIcon(weatherData['weather'][0]['main']);
           _wind = 'Wind: ${weatherData['wind']['speed']} m/s';
           _humidity = 'Humidity: ${weatherData['main']['humidity']}%';
           _precipitation = weatherData.containsKey('rain')
@@ -101,13 +110,54 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
   }
 
+  Future<void> _fetchForecastData() async {
+    var currentLocation = await location.getLocation();
+    var url = Uri.parse(
+        'https://c8c4-178-62-65-5.ngrok-free.app/weather?action=2&lat=${currentLocation.latitude}&lon=${currentLocation.longitude}');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      var forecastData = jsonDecode(response.body);
+      if (!mounted) return;
+      setState(() {
+        _forecastData = forecastData['list'];
+      });
+    } else {
+      logger.i('Failed to load forecast data');
+    }
+  }
+
+  String _capitalizeWords(String input) {
+    return input
+        .split(' ')
+        .map((word) => word[0].toUpperCase() + word.substring(1))
+        .join(' ');
+  }
+
+  String _getWeatherIcon(String main) {
+    switch (main.toLowerCase()) {
+      case 'clear':
+        return '☀️';
+      case 'clouds':
+        return '☁️';
+      case 'rain':
+        return '🌧️';
+      case 'snow':
+        return '❄️';
+      case 'drizzle':
+        return '🌦️';
+      case 'thunderstorm':
+        return '⛈️';
+      default:
+        return '🌫️'; // Default to fog for other cases
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Weather in Your Location'),
+        title: const Text('Weather'),
         backgroundColor: Colors.blueGrey[900],
-        elevation: 0,
       ),
       body: buildBody(),
     );
@@ -130,28 +180,59 @@ class _WeatherScreenState extends State<WeatherScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(_location,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
-            SizedBox(height: 10),
-            Text(_temperature,
-                style: TextStyle(
-                    fontSize: 60.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white)),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_temperature,
+                    style: const TextStyle(
+                        fontSize: 60.0,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white)),
+              ],
+            ),
+            Text(_weatherIcon, style: const TextStyle(fontSize: 48)),
             Text(_weatherDescription,
-                style: TextStyle(fontSize: 24.0, color: Colors.white)),
-            SizedBox(height: 20),
+                style: const TextStyle(fontSize: 24.0, color: Colors.white)),
+            const SizedBox(height: 20),
             Text(_wind,
-                style: TextStyle(fontSize: 16.0, color: Colors.white70)),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white70)),
             Text(_humidity,
-                style: TextStyle(fontSize: 16.0, color: Colors.white70)),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white70)),
             Text(_precipitation,
-                style: TextStyle(fontSize: 16.0, color: Colors.white70)),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white70)),
+            const SizedBox(height: 20),
+            const Text("Every 3-hours Forecast",
+                style: TextStyle(
+                    fontSize: 22.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
+            _buildForecastList(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildForecastList() {
+    return Column(
+      children: _forecastData.map((entry) {
+        return ListTile(
+          title: Text(_capitalizeWords(entry['weather'][0]['description']),
+              style: const TextStyle(color: Colors.white)),
+          subtitle: Text(
+              'Temp: ${entry['main']['temp'].toString()}°C at ${entry['dt_txt']}',
+              style: const TextStyle(color: Colors.white70)),
+          leading: Text(_getWeatherIcon(entry['weather'][0]['main']),
+              style: const TextStyle(fontSize: 24)),
+          trailing: Text('Wind: ${entry['wind']['speed'].toString()} m/s',
+              style: const TextStyle(color: Colors.white70)),
+        );
+      }).toList(),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:smarthub_flutter/screens/login_screen.dart';
 import '../extensions/animated_list_state_extension.dart';
 import 'package:logger/logger.dart';
 import 'grid/calendar_screen.dart';
-import 'grid/news_screen.dart';
+import 'grid/news/news_screen.dart';
 import 'grid/weather_screen.dart';
 import 'grid/bus_screen.dart';
 

@@ -153,7 +153,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: newPasswordController,
                 obscureText: true,
@@ -168,7 +168,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordCheck,
                 obscureText: true,
@@ -182,7 +182,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
               Container(
                 height: 50,
                 decoration: BoxDecoration(

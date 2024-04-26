@@ -59,9 +59,9 @@ class LoginScreenState extends State<LoginScreen> {
         context,
         MaterialPageRoute(builder: (context) => const RegisterScreen()),
       );
-      print("User signed out");
+      logger.i("User signed out");
     } catch (e) {
-      print("Error signing out: $e");
+      logger.i("Error signing out: $e");
     }
   }
 
