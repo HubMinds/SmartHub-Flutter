@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smarthub_flutter/screens/login_screen.dart';
 import '../extensions/animated_list_state_extension.dart';
 import 'package:logger/logger.dart';
+import 'Feedback.dart';
 import 'grid/calendar_screen.dart';
 import 'grid/news/news_screen.dart';
 import 'grid/weather_screen.dart';
@@ -119,18 +120,35 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         // Use Scaffold widget to define the app layout
         appBar: AppBar(
-          title: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  signOutUser();
-                },
-              ),
-              const Text('SmartHub App'),
-            ],
-          ),
+        title: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                signOutUser();
+              },
+            ),
+            const Text('SmartHub App'),
+          ],
         ),
+        actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0), // Add padding here
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FeedbackPage()),
+                  );
+                },
+                child: Text(
+                  'Give us Feedback here',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+          ],
+      ),
         body: GridView.count(
           // Use a GridView instead of an AnimatedList
           key: _listKey, // Add the key for the animated list

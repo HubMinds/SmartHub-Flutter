@@ -54,7 +54,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   void _register() async {
     try {
-      await FirebaseAuth.instance.signOut();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const RegisterScreen()),
