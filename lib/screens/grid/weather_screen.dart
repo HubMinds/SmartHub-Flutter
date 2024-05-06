@@ -31,8 +31,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     super.initState();
     _checkLocationService();
-    _fetchCurrentLocationAndWeather();
-    _fetchForecastData();
     _startPeriodicWeatherUpdates();
   }
 
@@ -72,8 +70,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void _fetchCurrentLocationAndWeather() async {
-    var currentLocation = await location.getLocation();
-    _fetchWeather(currentLocation.latitude!, currentLocation.longitude!);
+    try {
+      var currentLocation = await location.getLocation();
+      if (currentLocation.latitude == null ||
+          currentLocation.longitude == null) {
+        setState(() {
+          _location = 'Location not available.';
+          _forecastData = []; // Ensure forecast data is cleared if no location.
+        });
+        logger.i('Location not available.');
+        return;
+      }
+
+      double latitude = currentLocation.latitude!;
+      double longitude = currentLocation.longitude!;
+      await _fetchWeather(latitude, longitude);
+      await _fetchForecast(latitude, longitude);
+    } catch (e) {
+      logger.i('Failed to get location or weather data with error: $e');
+      if (!mounted) return;
+      setState(() {
+        _location = 'Failed to get weather data. Error: $e';
+        _forecastData = []; // Clear data or show error on UI.
+      });
+    }
   }
 
   Future<void> _fetchWeather(double latitude, double longitude) async {
@@ -100,9 +120,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
         });
       } else {
         throw Exception(
-            'Failed to load weather data with status code: ${response.statusCode}');
+            'Failed to load current weather data with status code: ${response.statusCode}');
       }
     } catch (e) {
+      logger.i('Failed to load current weather data with error: $e');
       if (!mounted) return;
       setState(() {
         _location = 'Failed to load weather data. Error: $e';
@@ -110,19 +131,27 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
   }
 
-  Future<void> _fetchForecastData() async {
-    var currentLocation = await location.getLocation();
-    var url = Uri.parse(
-        'https://c8c4-178-62-65-5.ngrok-free.app/weather?action=2&lat=${currentLocation.latitude}&lon=${currentLocation.longitude}');
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var forecastData = jsonDecode(response.body);
+  Future<void> _fetchForecast(double latitude, double longitude) async {
+    try {
+      var url = Uri.parse(
+          'https://c8c4-178-62-65-5.ngrok-free.app/weather?action=2&lat=$latitude&lon=$longitude');
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var forecastData = jsonDecode(response.body);
+        if (!mounted) return;
+        setState(() {
+          _forecastData = forecastData['list'];
+        });
+      } else {
+        throw Exception(
+            'Failed to load forecast data with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.i('Failed to load forecast data with error: $e');
       if (!mounted) return;
       setState(() {
-        _forecastData = forecastData['list'];
+        _forecastData = []; // Clear forecast data if error occurs.
       });
-    } else {
-      logger.i('Failed to load forecast data');
     }
   }
 
@@ -219,8 +248,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Widget _buildForecastList() {
-    return Column(
-      children: _forecastData.map((entry) {
+    if (_forecastData.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(10),
+        child: Text("No forecast data available",
+            style: TextStyle(color: Colors.white70, fontSize: 16)),
+      );
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _forecastData.length,
+      itemBuilder: (context, index) {
+        var entry = _forecastData[index];
         return ListTile(
           title: Text(_capitalizeWords(entry['weather'][0]['description']),
               style: const TextStyle(color: Colors.white)),
@@ -232,7 +271,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           trailing: Text('Wind: ${entry['wind']['speed'].toString()} m/s',
               style: const TextStyle(color: Colors.white70)),
         );
-      }).toList(),
+      },
     );
   }
 }
