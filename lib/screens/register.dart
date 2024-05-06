@@ -54,7 +54,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool value = false;
 
   void _switch() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
@@ -128,7 +128,7 @@ class RegisterScreenState extends State<RegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Temp logo for now
-              const FlutterLogo(size: 100.0),
+              Image.asset('assets/smartHub_transparent.png', height: 100.0),
               const SizedBox(height: 50.0),
               const Text(
                 'Register',

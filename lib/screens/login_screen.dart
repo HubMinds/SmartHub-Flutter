@@ -54,7 +54,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   void _register() async {
     try {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const RegisterScreen()),
       );
@@ -106,7 +106,7 @@ class LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Temp logo for now
-              const FlutterLogo(size: 100.0),
+              Image.asset('assets/smartHub_transparent.png', height: 150.0),
               const SizedBox(height: 50.0),
               const Text(
                 'Login',

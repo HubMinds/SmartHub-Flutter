@@ -120,35 +120,56 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         // Use Scaffold widget to define the app layout
         appBar: AppBar(
-        title: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                signOutUser();
-              },
-            ),
-            const Text('SmartHub App'),
-          ],
-        ),
-        actions: [
+          title: Row(
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(
+                  Icons.exit_to_app, // Logout icon
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onPrimary, // Adjusts based on theme
+                ),
+                label: Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimary, // Ensures contrast with button background
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context)
+                      .colorScheme
+                      .primary, // Button background color from theme
+                  elevation: 2, // Optional: if you want some shadow
+                ),
+                onPressed: () {
+                  signOutUser();
+                },
+              ),
+            ],
+          ),
+          actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 20.0), // Add padding here
-              child: GestureDetector(
-                onTap: () {
+              padding: const EdgeInsets.only(right: 20.0),
+              child: TextButton(
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => FeedbackPage()),
                   );
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white, // Text color
+                ),
                 child: Text(
-                  'Give us Feedback here',
-                  style: TextStyle(fontSize: 20),
+                  'Give Feedback',
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
             ),
           ],
-      ),
+        ),
         body: GridView.count(
           // Use a GridView instead of an AnimatedList
           key: _listKey, // Add the key for the animated list
