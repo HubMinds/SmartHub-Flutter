@@ -59,6 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     TextField(
                       controller: _eventController,
                       decoration: InputDecoration(labelText: 'Event Name'),
+                      maxLength: 2000,
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
@@ -154,11 +155,41 @@ class _CalendarScreenState extends State<CalendarScreen> {
             subtitle: Text(
               'Time: ${selectedEvents[index].time.hour}:${selectedEvents[index].time.minute.toString().padLeft(2, '0')}',
             ),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () => _deleteEvent(selectedEvents[index]),
+            ),
           ),
         );
       },
     );
   }
+
+  void _deleteEvent(Event event) {
+    FirebaseFirestore.instance
+        .collection('users') // Root collection for users
+        .doc(widget.uid) // Document ID is the user's UID
+        .collection('events') // Subcollection for events
+        .doc(_formattedDate(_selectedDay!)) // Document ID is the formatted date
+        .update({
+      'events': FieldValue.arrayRemove([
+        {
+          'title': event.title,
+          'time': '${event.time.hour}:${event.time.minute}'
+        }
+      ])
+    }).then((_) {
+      print("Event deleted successfully!");
+      _loadEventsFromFirebase(); // Reload events after deleting an event
+    }).catchError((error) {
+      print("Failed to delete event: $error");
+    });
+  }
+
+  String _formattedDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
