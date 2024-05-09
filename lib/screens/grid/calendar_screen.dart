@@ -152,7 +152,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             onTap: () => print(""), // Handle onTap event if needed
             title: Text('${selectedEvents[index].title}'), // Display event name
             subtitle: Text(
-              'Time: ${selectedEvents[index].time.hour}:${selectedEvents[index].time.minute}',
+              'Time: ${selectedEvents[index].time.hour}:${selectedEvents[index].time.minute.toString().padLeft(2, '0')}',
             ),
           ),
         );
