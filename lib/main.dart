@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart'; // for testing home screen
+import 'screens/home_screen.dart'; // For testing HomeScreen
 
 void main() async {
   WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure flutter bindings are initialized
+      .ensureInitialized(); // Ensure Flutter bindings are initialized
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -23,7 +24,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(), // Set HomeScreen as the home property
+      // Pass FirebaseAuth.instance to the LoginScreen
+      home: LoginScreen(
+          auth: FirebaseAuth
+              .instance), // LoginScreen now expects a FirebaseAuth instance
     );
   }
 }

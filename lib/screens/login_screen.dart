@@ -8,10 +8,13 @@ import 'package:logger/logger.dart';
 var logger = Logger();
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final FirebaseAuth auth; // Added parameter for FirebaseAuth
+
+  const LoginScreen({Key? key, required this.auth})
+      : super(key: key); // Modify constructor to accept FirebaseAuth
 
   @override
-  LoginScreenState createState() => LoginScreenState();
+  LoginScreenState createState() => LoginScreenState(auth);
 }
 
 class FadePageRoute<T> extends MaterialPageRoute<T> {
@@ -39,12 +42,14 @@ class FadePageRoute<T> extends MaterialPageRoute<T> {
 var db = FirebaseFirestore.instance;
 
 class LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController newEmailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
+
+  LoginScreenState(this._auth); // Added constructor to accept FirebaseAuth
 
   bool login = false;
   bool passCheck = false;

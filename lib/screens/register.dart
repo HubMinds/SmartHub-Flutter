@@ -54,9 +54,12 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool value = false;
 
   void _switch() {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      MaterialPageRoute(
+          builder: (context) => LoginScreen(
+              auth: FirebaseAuth
+                  .instance)), // Pass the FirebaseAuth instance here
     );
   }
 
