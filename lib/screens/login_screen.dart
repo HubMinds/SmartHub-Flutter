@@ -46,16 +46,10 @@ class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController newEmailController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
 
-  LoginScreenState(this._auth); // Added constructor to accept FirebaseAuth
+  LoginScreenState(this._auth);
 
   bool login = false;
-  bool passCheck = false;
-  bool pass = false;
-  bool email = false;
-  bool value = false;
 
   void _register() async {
     try {
@@ -76,26 +70,19 @@ class LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       logger.i("User signed in: ${userCredential.user!.uid}");
-      String user = userCredential.user!.uid;
-
-      // Reset the login variable to false
-      setState(() {
-        login = false;
-      });
-
       if (mounted) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen(uid: user)),
+          MaterialPageRoute(
+              builder: (context) => HomeScreen(uid: userCredential.user!.uid)),
         );
       }
-      // Navigate to the next screen or perform other actions after successful login
     } catch (e) {
       logger.i("Failed to sign in: $e");
-      login = true;
-      _passwordController.clear();
-      setState(() {});
-      // Handle the error, e.g., show a snackbar or display an error message
+      setState(() {
+        login = true; // Trigger UI to show error
+        _passwordController.clear();
+      });
     }
   }
 
@@ -103,104 +90,108 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Temp logo for now
-              Image.asset('assets/smartHub_transparent.png', height: 150.0),
-              const SizedBox(height: 50.0),
-              const Text(
-                'Login',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  filled: true,
-                  fillColor: Colors.white,
-                  errorText: login ? 'not a valid email or password' : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+      body: SingleChildScrollView(
+        // Enable scrolling
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/smartHub_transparent.png', height: 150.0),
+                const SizedBox(height: 50.0),
+                const Text(
+                  'Login',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  filled: true,
-                  fillColor: Colors.white,
-                  errorText: login ? 'incorrect password or email' : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText: login ? 'not a valid email or password' : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32.0),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xff667eea), Color(0xff764ba2)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText: login ? 'incorrect password or email' : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
                   ),
                 ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+                const SizedBox(height: 32.0),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                      colors: [Color(0xff667eea), Color(0xff764ba2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
-                      )),
-                  onPressed: _signIn,
-                  child: const Center(
-                    child: Text(
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: _signIn,
+                    child: const Text(
                       'Sign In',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32.0),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xff667eea), Color(0xff764ba2)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                const SizedBox(height: 32.0),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                      colors: [Color(0xff667eea), Color(0xff764ba2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
                   ),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
-                      )),
-                  onPressed: _register,
-                  child: const Center(
-                    child: Text(
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: _register,
+                    child: const Text(
                       'Register Here',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>632129442438-4leqquucbq27smh4tp0n7l66d5fcs7rl.apps.googleusercontent.com</string>
+	<string>852941266418-qt68dpcdri6kl8csnabe62b7fvip1qm9.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.632129442438-4leqquucbq27smh4tp0n7l66d5fcs7rl</string>
+	<string>com.googleusercontent.apps.852941266418-qt68dpcdri6kl8csnabe62b7fvip1qm9</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC2XvVOHWfZkBy871c-Fb5vRd2ajZA8mqw</string>
+	<string>AIzaSyC264h4A9pA7Lrz9OfbIJddPuciTCP5XW8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>632129442438</string>
+	<string>852941266418</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.smarthubFlutter</string>
 	<key>PROJECT_ID</key>
-	<string>hubminds-9017f</string>
+	<string>hubminds-4710f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>hubminds-9017f.appspot.com</string>
+	<string>hubminds-4710f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:632129442438:ios:96324754861689f099f707</string>
+	<string>1:852941266418:ios:1049b61447113c10719f6b</string>
 </dict>
 </plist>
