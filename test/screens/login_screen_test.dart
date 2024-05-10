@@ -6,6 +6,15 @@ import 'package:smarthub_flutter/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mockito/mockito.dart';
 
+class FirebaseAuthMock extends Mock implements FirebaseAuth {
+  @override
+  Future<UserCredential> signInWithEmailAndPassword(
+      {required String email, required String password}) {
+    throw FirebaseAuthException(
+        code: 'user-not-found', message: 'No user found for that email.');
+  }
+}
+
 void main() {
   group('LoginScreen Tests', () {
     late MockFirebaseAuth mockAuth;
@@ -31,14 +40,8 @@ void main() {
     });
 
     testWidgets('Displays error on invalid login', (WidgetTester tester) async {
-      // Simulating an error scenario directly within the test
-      final wrongAuth = MockFirebaseAuth(mockUser: null, signedIn: false);
-      when(wrongAuth.signInWithEmailAndPassword(
-              email: anyNamed('email') as String,
-              password: anyNamed('password') as String))
-          .thenThrow(FirebaseAuthException(
-              code: 'user-not-found',
-              message: 'No user found for that email.'));
+      // Create a new mock for wrong authentication
+      final wrongAuth = FirebaseAuthMock();
 
       await tester.pumpWidget(MaterialApp(
         home: LoginScreen(auth: wrongAuth),
@@ -50,7 +53,9 @@ void main() {
           find.widgetWithText(TextFormField, 'Password'), 'wrongPassword');
       await tester.tap(find.text('Sign In'));
       await tester.pump(); // Trigger a frame
+      await tester.pumpAndSettle(); // Wait for all animations and state updates
 
+      // Check for error messages
       expect(find.text('incorrect password or email'), findsOneWidget);
     });
   });
