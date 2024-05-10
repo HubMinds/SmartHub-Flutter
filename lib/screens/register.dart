@@ -10,10 +10,12 @@ import 'package:logger/logger.dart';
 var logger = Logger();
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final FirebaseAuth auth;
+
+  const RegisterScreen({Key? key, required this.auth}) : super(key: key);
 
   @override
-  RegisterScreenState createState() => RegisterScreenState();
+  RegisterScreenState createState() => RegisterScreenState(auth: auth);
 }
 
 class FadePageRoute<T> extends MaterialPageRoute<T> {
@@ -41,11 +43,13 @@ class FadePageRoute<T> extends MaterialPageRoute<T> {
 var db = FirebaseFirestore.instance;
 
 class RegisterScreenState extends State<RegisterScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController newEmailController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController _passwordCheck = TextEditingController();
+
+  RegisterScreenState({required FirebaseAuth auth}) : _auth = auth;
 
   bool login = false;
   bool passCheck = false;
@@ -125,119 +129,120 @@ class RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Temp logo for now
-              Image.asset('assets/smartHub_transparent.png', height: 100.0),
-              const SizedBox(height: 50.0),
-              const Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-
-              TextFormField(
-                controller: newEmailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  filled: true,
-                  fillColor: Colors.white,
-                  errorText:
-                      email ? "Email must be in abc@def.com format" : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+        child: SingleChildScrollView(
+          // Wrap with a SingleChildScrollView
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/smartHub_transparent.png', height: 100.0),
+                const SizedBox(height: 50.0),
+                const Text(
+                  'Register',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  filled: true,
-                  fillColor: Colors.white,
-                  errorText:
-                      pass ? "Password must be at least 6 characters" : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _passwordCheck,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  filled: true,
-                  fillColor: Colors.white,
-                  errorText: passCheck ? "Passwords do not match" : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32.0),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xff667eea), Color(0xff764ba2)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      )),
-                  onPressed: _createUser,
-                  child: const Center(
-                    child: Text(
-                      'Register',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  controller: newEmailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText:
+                        email ? "Email must be in abc@def.com format" : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32.0),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xff667eea), Color(0xff764ba2)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      )),
-                  onPressed: _switch,
-                  child: const Center(
-                    child: Text(
-                      'Already have an account? Sign in here',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: newPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText:
+                        pass ? "Password must be at least 6 characters" : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: _passwordCheck,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText: passCheck ? "Passwords do not match" : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32.0),
+                Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff667eea), Color(0xff764ba2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        )),
+                    onPressed: _createUser,
+                    child: const Center(
+                      child: Text(
+                        'Register',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32.0),
+                Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff667eea), Color(0xff764ba2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        )),
+                    onPressed: _switch,
+                    child: const Center(
+                      child: Text(
+                        'Already have an account? Sign in here',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

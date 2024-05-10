@@ -55,7 +55,7 @@ class LoginScreenState extends State<LoginScreen> {
     try {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+        MaterialPageRoute(builder: (context) => RegisterScreen(auth: _auth)),
       );
       logger.i("User signed out");
     } catch (e) {
